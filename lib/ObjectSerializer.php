@@ -495,7 +495,14 @@ class ObjectSerializer
 
         if (method_exists($class, 'getAllowableEnumValues')) {
             if (!in_array($data, $class::getAllowableEnumValues(), true)) {
-                $data = end($class::getAllowableEnumValues());
+
+                // Not working on PHP 8.3+
+                // Throws "Only variables should be passed by reference" error
+                // $data = end($class::getAllowableEnumValues());
+
+                $tmpData = $class::getAllowableEnumValues();
+                $data = end($tmpData);
+
             }
             return $data;
         } else {
